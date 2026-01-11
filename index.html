@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mein erstes Mini-Projekt</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f7f3f0; 
+  margin: 50px;
+}
+
+h1 { color: #3a6351; }
+p { font-size: 18px; color: #4b4b4b; }
+.gruß { color: #d9746f; font-weight: bold; font-size: 20px; margin-bottom: 30px; }
+.ki-bild { margin: 20px 0; width: 300px; border: 2px solid #3a6351; }
+input, button { 
+  font-size: 16px; 
+  padding: 6px; 
+  margin: 5px; 
+  border: 1px solid #a7a7a7; 
+  border-radius: 6px;
+  background-color: #fff9f5;
+  color: #4b4b4b;
+}
+
+button {
+  cursor: pointer;
+  background-color: #d9746f;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #c05d50;
+}
+
+#chat {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff5eb;
+  border-radius: 12px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.user-msg, .bot-msg {
+  padding: 10px 15px;
+  margin: 5px;
+  max-width: 75%;
+  border-radius: 20px;
+  word-wrap: break-word;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: appear 0.3s forwards;
+}
+
+.user-msg {
+  align-self: flex-start;
+  background-color: #e3d4b9;
+  color: #3a3a3a;
+}
+
+.bot-msg {
+  align-self: flex-end;
+  background-color: #d9746f;
+  color: white;
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Willkommen zu meinem Mini-Projekt</h1>
+<p>Dies ist mein erstes HTML-Projekt mit Styling und Interaktivität.</p>
+
+<div class="gruß">
+    Brasilianische Grüße gehen raus an Smarty von Nono 🇧🇷
+</div>
+
+<img src="https://picsum.photos/300/200" alt="KI generiertes Bild" class="ki-bild">
+
+<p>Gib deinen Namen ein:</p>
+<input type="text" id="nameInput" placeholder="Dein Name">
+<button onclick="begrüße()">Begrüßen</button>
+<p id="ergebnis"></p>
+
+<hr>
+
+<p>Sprich mit dem Mini Bot:</p>
+<input type="text" id="userInput" placeholder="Sag etwas">
+<button onclick="antwort()">Senden</button>
+
+<div id="chat"></div>
+
+<script>
+let gemerkterName = "";
+
+function begrüße() {
+  const name = document.getElementById("nameInput").value.trim();
+  const ergebnis = document.getElementById("ergebnis");
+  const lowerName = name.toLowerCase();
+
+  if (!name) {
+    ergebnis.textContent = "Bitte gib deinen Namen ein!";
+    return;
+  }
+
+  if (lowerName === "smart") {
+    ergebnis.textContent = "Ahhh Smart 😄 Der legendäre Name. Extra Grüße von Nono 🇧🇷";
+  } else if (lowerName === "andrew") {
+    ergebnis.textContent = "Andrew detected 🤖 Klingt nach jemandem mit Superhirn.";
+  } else if (lowerName === "smarty") {
+    ergebnis.textContent = "Smarty detected 😎 Grüße von Nono!";
+  } else {
+    ergebnis.textContent = "Hallo " + name + "! Schön dich zu treffen!";
+  }
+
+  gemerkterName = name;
+}
+
+function antwort() {
+  const inputField = document.getElementById("userInput");
+  const chat = document.getElementById("chat");
+
+  let originalInput = inputField.value.trim();
+  let input = originalInput.toLowerCase();
+  let botAntworten = [];
+  let botText = "";
+
+  if (!originalInput) return;
+
+  // Name über "ich heiße" merken
+  if (input.startsWith("ich heiße")) {
+    gemerkterName = originalInput.replace(/ich heiße/i, "").trim();
+    botAntworten = [
+      "Schön dich kennenzulernen, " + gemerkterName + " 😊",
+      "Ich merke mir deinen Namen, " + gemerkterName + ".",
+      "Dein Name ist jetzt gespeichert, " + gemerkterName + "."
+    ];
+  } 
+  // Witz-Funktion
+  else if (input.includes("witz")) {
+    const witze = [
+      "Warum können Geister so schlecht lügen? Weil man durch sie hindurchsieht 👻",
+      "Was macht ein Keks unter einem Baum? Krümel 😄",
+      "Ich würde dir einen Witz erzählen, aber er ist zu süß 😎"
+    ];
+    botText = witze[Math.floor(Math.random() * witze.length)];
+  } 
+  else if (input.includes("hallo") || input.includes("hi")) {
+    botAntworten = gemerkterName
+      ? [
+          "Hallo " + gemerkterName + " 😊 Schön dich zu sehen.",
+          "Hey " + gemerkterName + "! Wie geht es dir?",
+          "Hi " + gemerkterName + " 👋"
+        ]
+      : [
+          "Hallo! Schön, dass du da bist 😊",
+          "Hi! Wie fühlt sich dein Tag an?",
+          "Hey 👋 Erzähl mir etwas von dir."
+        ];
+  } 
+  else if (input.includes("traurig") || input.includes("schlecht") || input.includes("müde")) {
+    botAntworten = [
+      "Das tut mir leid zu hören.",
+      "Magst du erzählen, was los ist?",
+      "Ich bin bei dir."
+    ];
+  } 
+  else if (input.includes("freu") || input.includes("gut")) {
+    botAntworten = [
+      "Das freut mich richtig!",
+      "Schön 😊 Was macht dich gerade glücklich?",
+      "Das klingt nach guter Energie."
+    ];
+  } 
+  else if (input.includes("smarty")) {
+    botAntworten = [
+      "Grüße an Smarty von Nono 🇧🇷",
+      "Smarty bekommt heute extra gute Vibes 🇧🇷",
+      "Bot winkt Smarty zu 👋"
+    ];
+  } 
+  // Standardantworten
+  else {
+    botAntworten = [
+      "Erzähl mir mehr darüber.",
+      "Wie fühlst du dich dabei?",
+      "Das klingt interessant, magst du weiterreden?",
+      "Ich höre aufmerksam zu."
+    ];
+  }
+
+  // botText nur setzen, wenn es noch leer ist (z. B. Name oder Standardantworten)
+  if (!botText) {
+    botText = botAntworten[Math.floor(Math.random() * botAntworten.length)];
+  }
+
+  // Sprechblasen mit Animation
+  chat.innerHTML += "<p class='user-msg'>" + originalInput + "</p>";
+  chat.innerHTML += "<p class='bot-msg'>" + botText + "</p>";
+
+  chat.scrollTop = chat.scrollHeight;
+  inputField.value = "";
+}
+
+</script>
+
+</body>
+</html>
